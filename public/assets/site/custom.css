@@ -1,0 +1,16 @@
+* {
+    font-style: "Roboto" !important;
+}
+
+.bg-default {
+    background-color: #3f51b5 !important;
+    color: #fff !important;
+}
+
+.color-white {
+    color: #fff !important;
+}
+
+.jp-card-front, .jp-card-back{
+    background-color: #3f51b5 !important;
+}

@@ -1,0 +1,27 @@
+# This is a sample build configuration for PHP.
+# Check our guides at https://confluence.atlassian.com/x/e8YWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: php:7.2-fpm
+
+pipelines:
+  default:
+    - step:
+        script:
+          - apt-get update && apt-get install -qy git curl libmcrypt-dev && apt-get install -y unzip && apt-get install -y libpng-dev
+          - yes | pecl install mcrypt-1.0.1
+          - docker-php-ext-install gd
+          - docker-php-ext-install pdo_mysql
+          - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+          - composer install
+          - php -r "copy('.env.pipelines', '.env');"
+          - ls -lhs
+          - php artisan key:generate
+          - git add .env.pipelines
+          - git add .env -f
+          - php artisan migrate --force
+          - php artisan cache:clear
+          - php artisan config:clear
+          - php artisan view:clear
+          - git push https://heroku:6d93895d-a1c1-4266-b9ac-fc19efdd2ce0@git.heroku.com/gotrackfood.git HEAD
